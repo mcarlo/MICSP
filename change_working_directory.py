@@ -2,7 +2,10 @@ import os
 
 print os.getcwd()
 
-os.chdir("c:\\users\\anichini\\documents\\gitHub\\micsp")
+#preferred_directory = "c:\\users\\anichini\\documents\\gitHub\\micsp"
+preferred_directory = 'c:\\users\\tom_anichini\\documents\\github\\micsp'
+
+os.chdir(preferred_directory)
 
 print("Path at terminal when executing this file")
 print(os.getcwd() + "\n")
