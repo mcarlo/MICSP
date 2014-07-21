@@ -1,0 +1,23 @@
+Enter n to deal a new hand, r to replay the last hand, or e to end game: r
+You have not played a hand yet. Please play a new hand first!
+
+Enter n to deal a new hand, r to replay the last hand, or e to end game: r
+You have not played a hand yet. Please play a new hand first!
+
+Enter n to deal a new hand, r to replay the last hand, or e to end game: r
+You have not played a hand yet. Please play a new hand first!
+
+Enter n to deal a new hand, r to replay the last hand, or e to end game: r
+You have not played a hand yet. Please play a new hand first!
+
+Enter n to deal a new hand, r to replay the last hand, or e to end game: r
+You have not played a hand yet. Please play a new hand first!
+
+Enter n to deal a new hand, r to replay the last hand, or e to end game: n
+Hand passed to playHand:  a a p r e e t
+<playHand execution not shown for grading brevity>
+None
+
+*** ERROR: Failed to ask for input!
+Expected 'Enter n to deal a new hand, r to replay the last hand, or e to end game: e'
+ Got 'None' ***
