@@ -2,8 +2,8 @@ import os
 
 print os.getcwd()
 
-#preferred_directory = "c:\\users\\anichini\\documents\\gitHub\\micsp"
-preferred_directory = 'c:\\users\\tom_anichini\\documents\\github\\micsp'
+preferred_directory = "c:\\users\\anichini\\documents\\gitHub\\micsp"
+#preferred_directory = 'c:\\users\\tom_anichini\\documents\\github\\micsp'
 
 os.chdir(preferred_directory)
 
