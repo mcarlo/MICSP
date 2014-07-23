@@ -22,6 +22,52 @@ library("tcltk")
 # Import data
 data <- mtcars
 
+# Figure 1: Boxplot showing motivation for analysis
+par(mfrow = c(1, 1))
+
+boxplot(mpg ~ am, data = data, varwidth = TRUE, 
+        col = "lightgray", names = c("Manual","Automatic"))
+title(main = "Figure 1. Miles per Gallon vs. Transmission Type\n (mtcars data)", 
+      xlab = "Transmission Type", ylab = "Miles per Gallon")
+
+tapply(data$mpg, data$am, mean) # 17.1, 24.4
+
+# Describe data
+# Data consists of fuel efficiencey and 10 other measurements for 32 different car models published by 
+# Motor Trends in 1974. Measurements include:
+# mpg
+# cyl
+# disp
+# hp
+# drat
+# wt
+# qsec
+# vs
+# am
+# gear
+# carb
+
+# Cars included models from US and non-US manufacturers
+
+# Several are clearly related to fuel efficiency. That wt should be negatively 
+# related seems intuitively obvious. What else is related?
+#
+fit <- lm(mpg ~ am, data)
+summary(fit)
+par(mfrow = c(2, 2))
+plot(fit)
+
+fit1 <- lm(mpg ~ ., data)
+plot(fit1)
+
+cor(data)
+
+pairs(~ mpg + cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb, data =
+        mtcars, main="Figure 2. Correlation Matrix\n (mtcars data)")
+coplot(mpg ~ wt | as.factor(am), data = data,
+       panel = panel.smooth, rows = 1)
+
+
 table(data$am, data$mpg )
 
 cor(data)
@@ -161,48 +207,6 @@ pairs(~ mpg + am + carb + dom,data=data,
 coplot(mpg ~ am | dom + carb, data = data,
        panel = panel.smooth, rows = 1)
 
-dataX <- data[-17,]
-rownames(dataX)
-
-fitX <- lm(mpg ~ ., data = dataX)
-par(mfrow = c(2, 2))
-plot(fitX)
-summary(fitX)
-cor(dataX)
-vif(fitX)
-fit2X <- lm(mpg ~ cyl + hp + drat + wt + qsec + vs + am + gear + carb + dom, dataX)
-vif(fit2X)
-fit3X <- lm(mpg ~ hp + drat + wt + qsec + vs + am + gear + carb + dom, dataX)
-vif(fit3X)
-plot(fit3X)
-confint(fit3X)
-fit4X <- lm(mpg ~ hp + drat + qsec + vs + am + gear + carb + dom, dataX)
-vif(fit4X)
-confint(fit4X)
-fit5X <- lm(mpg ~ drat + qsec + vs + am + gear + carb + dom, dataX)
-vif(fit5X)
-fit6X <- lm(mpg ~ drat + vs + am + gear + carb + dom, dataX)
-vif(fit6X)
-fit7X <- lm(mpg ~ drat + vs + am + carb + dom, dataX)
-vif(fit7X)
-fit8X <- lm(mpg ~ vs + am + carb + dom, dataX)
-vif(fit8X)
-summary(fit8X)
-confint(fit8X)
-fit9X <- lm(mpg ~ am + carb + dom, dataX)
-vif(fit9X)
-summary(fit9X)
-confint(fit9X)
-fitaX <- lm(mpg ~ am + vs + dom, dataX)
-fitbX <- lm(mpg ~ am + carb + dom + wt, dataX)
-summary(fitbX)
-vif(fitbX)
-confint(fitbX)
-plot(fitbX)
-
-fitcX <- lm(mpg ~ carb + dom + wt, dataX)
-
-anova(fitX, fit2X, fit4X, fitaX, fitbX)
 
 rownames(data)
 data$country[rownames(data) %in% c("Mazda RX4","Mazda RX4 Wag","Datsun 710","Honda Civic","Toyota Corolla","Toyota Corona")] <- "Japan"
@@ -220,10 +224,11 @@ data$country[rownames(data) %in% c("Fiat 128", "Fiat X1-9", "Ferrari Dino",
 data$country[rownames(data) == "Lotus Europa"] <- "England"
 data$country[rownames(data) == "Volvo 142E"] <- "Sweden"
 
-fitC <- lm(mpg ~ . -dom, data)
-plot(fitC)
-vif(fitC)
+fitC <- lm(mpg ~ ., data)
+outlierTest(fitC)
+
 summary(fitC)
+plot(fitC)
 vif(fitC)
 
 
@@ -242,6 +247,11 @@ summary(fitC6)
 fitC7 <- lm(mpg ~ vs + am + carb + country, data)
 vif(fitC7)
 anova(fitC7)
+confint(fitC7)
+fitC8 <- lm(mpg ~ wt + am + carb + country, data)
+vif(fitC8)
+anova(fitC8)
+summary(fitC8)
 summary(fitC7)
 confint(fitC7)
 plot(fitC7)
