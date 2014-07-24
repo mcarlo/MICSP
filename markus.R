@@ -32,6 +32,8 @@ title(main = "Figure 1. Miles per Gallon vs. Transmission Type\n (mtcars data)",
 
 tapply(data$mpg, data$am, mean) # 17.1, 24.4
 
+
+
 # Describe data
 # Data consists of fuel efficiencey and 10 other measurements for 32 different car models published by 
 # Motor Trends in 1974. Measurements include:
