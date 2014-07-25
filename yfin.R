@@ -56,6 +56,9 @@ length(lapply(tables, function(t) dim(t)))
 rm(platformTable)
 platformTable <- as.matrix(data.frame(tables[19], stringsAsFactors = FALSE))
 maxRow <- length(platformTable[,1])
+platformTable[48,]
+colnames(platformTable)
+colnames(tables[1:21])
 
 firstBrokers <- lapply(colnames(platformTable), function(s) str_replace(s, "NULL.", ""))
 firstBrokers
