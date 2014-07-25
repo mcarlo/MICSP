@@ -42,20 +42,23 @@ The variable weight (wt) is a significant confounder. Whether the am variable wa
 ---
 #### Figure 1. Data variables in mtcars data
 ```{r,cache=FALSE,echo=FALSE}
+library(knitr)
 data <- mtcars
 
 colnames(data)
 ```
----
+
 #### Figure 2. Miles per Gallon vs. Transmission Type
 ```{r,cache=FALSE,echo=FALSE}
-avgs <- tapply(mtcars$mpg, mtcars$am, mean) # 17.1, 24.4
+#avgs <- tapply(mtcars$mpg, mtcars$am, mean) # 17.1, 24.4
 
 par(mfrow = c(1, 1))
+require(datasets);data(mtcars)
+require(stats); require(graphics)
 
-fig2 <- boxplot(mpg ~ am, data = mtcars, varwidth = TRUE, 
-        col = "lightgray", names = c("\n Manual\n (Avg. 17.1 MPG)","\n Automatic\n (Avg. 24.4 MPG)"))
-fig2
+boxplot(mpg ~ am, data = data, varwidth = TRUE, 
+        col = "lightgray", names = c("\n Manual\n (Avg. 17.1 MPG)",
+                                     "\n Automatic\n (Avg. 24.4 MPG)"))
 title(main = "(mtcars data)", 
       xlab = "Transmission Type", ylab = "Miles per Gallon")
 
