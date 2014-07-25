@@ -1,38 +1,33 @@
-# The Effect of Transmission Type on Fuel Efficiency
+### The Effect of Transmission Type on Fuel Efficiency
 
-## Executive Summary
+#### Executive Summary
 This analysis addresses whether an automatic or manual transmission is better for MPG. It attempts to quantify the MPG difference between automatic and manual transmissions.
 
-This analysis finds:
+Among vehicles in the sample data, this analysis finds:
 
-* Sample vehicles with automatic transmissions were more fuel efficient than those with manual transmissions
+* Automatic transmissions were more fuel efficient manual transmissions
 
-* At a first approximation (without controlling for any other variables), Automatic transmissions add 7.3 MPG over Manual transmissions
+* Without controlling for any other variables, Automatic transmissions add 7.3 MPG over Manual transmissions
 
-* Controlling for number of carburateurs, whether the engine is a V-shape, and country of manufacture, Automatic transmissions add an extra 5.8 MPG, with a 95% confidence interval of 2.4 to 9.2 MPG
+* The selected model controls for number of carburateurs, V-shape engine, and country of manufacture; given these controls Automatic transmissions add an extra 5.8 MPG, with a 95% confidence interval of 2.4 to 9.2 MPG
 
 ---
-##  Data Processing 
+####  Data Processing 
 The data consists of 32 observations from the mtcars dataset within the R package datasets. The mtcars documentation states the data "was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models)." Figure 1 in the Appendix lists the variables.
 
 ---
-##  Data Transformations
+####  Data Transformations
 The sole transformation was to add a variable, country, which grouped cars by country of manufacture. The models were grouped as:
 
   * Sweden: Volvo 142E
-
   * England: Lotus Europa
-
   * Italy: Fiat 128, Fiat X1-9, Ferrari Dino, Maserati Bora
-
   * Japan: Mazda RX4,Mazda RX4 Wag,Datsun 710,Honda Civic, Toyota Corolla,Toyota Corona
-
   * Germany: Merc 240D, Merc 230, Merc 280, Merc 280C, Merc 450SE, Merc 450SL, Merc 450SLC, Porsche 914-2
-
   * USA: Hornet 4 Drive, Hornet Sportabout, Valiant, Duster 360, Cadillac Fleetwood, Lincoln Continental, Chrysler Imperial, Dodge Challenger, AMC Javelin, Camaro Z28, Pontiac Firebird, Ford Pantera L
   
 ---
-##  Exploratory Data Analysis
+####  Exploratory Data Analysis
 Figure 2 in the Appendix illustrates the motivation for this analysis. The figure depicts boxplots of MPG, grouped by transmission type. The entire inter-quartile distribution for Automatic is above that for Manual. The mean mpg for the groups are 17.1 and 24.4, respectively. At a crude level, this implies the effect of Automatic transmission is to increase mpg by 7.3 mpg.
 
 As we will see, this estimate is too crude. Several other variables are correlated with mpg and with each other. Weight (wt) is an important confounder. It has the largest (negative) correlation with mpg, -.87, and it is also highly correlated with several variables.
@@ -40,57 +35,58 @@ As we will see, this estimate is too crude. Several other variables are correlat
 Figure 2 depicts a correlation matrix of the variables. At a glance it is apparent that several variables appear promising at explaining mpg.
 
 ---
-## Discussion
+#### Discussion
 The variable weight (wt) is a significant confounder. Whether the am variable was significant was largely influenced by whether wt was in the model. In models including the wt variable, the am variable tended not to be significant.
 
-# Appendix
+### Appendix
 ---
-### Figure 1. Data variables in mtcars data
-```{r,cache=TRUE,echo=FALSE}
+#### Figure 1. Data variables in mtcars data
+```{r,cache=FALSE,echo=FALSE}
 data <- mtcars
 
 colnames(data)
 ```
 ---
-### Figure 2. Miles per Gallon vs. Transmission Type
-```{r,cache=TRUE,echo=FALSE}
-avgs <- tapply(data$mpg, data$am, mean) # 17.1, 24.4
+#### Figure 2. Miles per Gallon vs. Transmission Type
+```{r,cache=FALSE,echo=FALSE}
+avgs <- tapply(mtcars$mpg, mtcars$am, mean) # 17.1, 24.4
 
 par(mfrow = c(1, 1))
 
-fig2 <- boxplot(mpg ~ am, data = data, varwidth = TRUE, 
+fig2 <- boxplot(mpg ~ am, data = mtcars, varwidth = TRUE, 
         col = "lightgray", names = c("\n Manual\n (Avg. 17.1 MPG)","\n Automatic\n (Avg. 24.4 MPG)"))
+fig2
 title(main = "(mtcars data)", 
       xlab = "Transmission Type", ylab = "Miles per Gallon")
 
 ```
 ---
-### Figure 3. Correlation Matrix
-```{r,cache=TRUE,echo=FALSE}
+#### Figure 3. Correlation Matrix
+```{r,cache=FALSE,echo=FALSE}
 pairs(~ mpg + cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb, data =
         mtcars, main="(mtcars data)")
 
 ```
 ---
-### Figure 4. Multiple Regression using all variables: Summary
-```{r,cache=TRUE,echo=FALSE}
+#### Figure 4. Multiple Regression using all variables: Summary
+```{r,cache=FALSE,echo=FALSE}
 fit <- lm(mpg ~ ., data = mtcars)
 summary(fit)
 ```
-### Figure 5. Fit Analysis, Multiple Regression using All Variables
-```{r,cache=TRUE,echo=FALSE}
+#### Figure 5. Fit Analysis, Multiple Regression using All Variables
+```{r,cache=FALSE,echo=FALSE}
 par(mfrow = c(2, 2))
 plot(fit)
 ```
 ---
-### Figure 6. Variance Inflation Factors, All Variables
-```{r,cache=TRUE,echo=FALSE}
+#### Figure 6. Variance Inflation Factors, All Variables
+```{r,cache=FALSE,echo=FALSE}
 library("car")
 vif(fit)
 ```
 ---
-### Figure 7. Multiple Regression using country and other variables: Summary
-```{r,cache=TRUE,echo=FALSE}
+#### Figure 7. Multiple Regression using country and other variables: Summary
+```{r,cache=FALSE,echo=FALSE}
 data <- mtcars
 data$country[rownames(data) %in% c("Mazda RX4","Mazda RX4 Wag","Datsun 710","Honda Civic","Toyota Corolla","Toyota Corona")] <- "Japan"
 data$country[rownames(data) %in% c( "Hornet 4 Drive", "Hornet Sportabout", 
@@ -101,7 +97,8 @@ data$country[rownames(data) %in% c( "Hornet 4 Drive", "Hornet Sportabout",
                                     "Pontiac Firebird", "Ford Pantera L")] <- "USA"
 data$country[rownames(data) %in% c("Merc 240D", "Merc 230", "Merc 280", 
                                    "Merc 280C", "Merc 450SE", "Merc 450SL", 
-                                   "Merc 450SLC", "Porsche 914-2")] <- "Germany"
+                                   "Merc 450SLC", "Porsche 914-2")] <-"Germany"
+
 data$country[rownames(data) %in% c("Fiat 128", "Fiat X1-9", "Ferrari Dino", 
                                    "Maserati Bora")] <- "Italy"
 data$country[rownames(data) == "Lotus Europa"] <- "England"
@@ -113,16 +110,3 @@ fit2 <- lm(mpg ~ vs + am + carb + country, data)
 summary(fit1)
 summary(fit2)
 ```
-### Figure 5. Fit Analysis, Multiple Regression using All Variables
-```{r,cache=TRUE,echo=FALSE}
-par(mfrow = c(2, 2))
-plot(fit)
-```
----
-### Figure 6. Variance Inflation Factors, All Variables
-```{r,cache=TRUE,echo=FALSE}
-library("car")
-vif(fit)
-```
-
-
